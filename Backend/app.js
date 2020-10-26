@@ -14,7 +14,8 @@ const PORT = 3000;
 
 app.use(bodyParser.json())
 
-app.use((req, res, next) =>{  // To remove CROS (cross-resource-origin-platform) problem 
+// To remove CROS (cross-resource-origin-platform) problem
+app.use((req, res, next) =>{   
     res.setHeader('Access-Control-Allow-Origin',"*"); // to allow all client we use *
     res.setHeader('Access-Control-Allow-Methods',"OPTIONS,GET,POST,PUT,PATCH,DELETE"); //these are the allowed methods 
     res.setHeader('Access-Control-Allow-Headers', "*"); // allowed headers (Auth for extra data related to authoriaztiom)
@@ -26,7 +27,7 @@ app.use(authRoutes)
 
 //Page Not Found 
 app.use((req,res,next) =>{
-    next(createError.NotFound())
+    next(createError.NotFound("Page not Found"))
 })
 
 //errorHandeling Middleware
@@ -42,8 +43,6 @@ app.use((err,req,res,next) => {
         }
     })
 })
-
-
 
 
 mongoose.connect(process.env.DB_CONNECT,

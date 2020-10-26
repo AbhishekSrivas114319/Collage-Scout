@@ -1,8 +1,14 @@
+//Schemas
 const User = require('../models/Users')
+const Otp = require('../models/otp') 
+//
 const bcrypt = require('bcryptjs')
 const { validationResult } = require("express-validator");
 const otpGenerator = require('otp-generator')
-const emailSender = require('../utils/mailsender')
+const emailSender = require('../utils/mailsender');
+const JWT = require('jsonwebtoken')
+const dotenv = require('dotenv')
+dotenv.config();
 // const { authSchema } = require('../helpers/validation_Schema');
 // const { signAccessToken } = require('../helpers/jwt_helper'); 
 
@@ -63,6 +69,17 @@ exports.signup =  (req,res,next) =>{
 
         const OTP = otpGenerator.generate(6, { upperCase: false, specialChars: false, alphabets: false });
         
+        const otp = new Otp({
+            otp:OTP,
+            email:email
+        })
+
+        otp.save().then(result=>{
+            console.log("Otp saved in database")
+        }).catch(err => {
+            res.json("Otp not Saved in database")
+        })
+
         res.send("OTP SEND CHECK YOUR EMAIL");
         return emailSender.sendemail(email,OTP);
         
@@ -72,6 +89,48 @@ exports.signup =  (req,res,next) =>{
         next(err);
     })
 };
+
+exports.checkOTP = (req,res,next) =>{
+    console.log("here at OTP check")
+    const email = req.body.email;
+    const checkOtp = req.body.otp;
+    console.log("1")
+    Otp.findOne({email:email}).then(otpResult =>{
+        console.log("2")
+        if(otpResult.otp === checkOtp){
+            console.log("3")
+            User.findOne({email:email}).then(user => {
+                user.isverified = "True";
+                const signAccessToken  = JWT.sign(
+                    {
+                      email: user.email,
+                      userId:user._id.toString()
+                    },
+                    process.env.ACCESS_TOKEN_KEY,
+                    { expiresIn:'1h' } 
+                  );
+    
+                  const verifyAccessToken  = JWT.sign(
+                    {
+                      email: user.email,
+                      userId:user._id.toString()
+                    },
+                    process.env.VERIFY_TOKEN_KEY,
+                    { expiresIn:'1y' } 
+                  );
+    
+                res.json({message:"Otp Verified",signAccessToken,verifyAccessToken})
+            }).catch(err => {
+                res.json({message:"Provide a registered Email"})
+            })
+            
+        }else{
+            res.json("otp Entered is incorrect")
+        }
+    }).catch(err => {
+        res.json("Otp expire, Please resend the email")
+    })
+}
 
 exports.login = (req,res,next) =>{
     console.log("here at Login")

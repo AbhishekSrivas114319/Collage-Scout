@@ -2,6 +2,7 @@ const router = require('express').Router();
 const authController = require('../controllers/auth')
 const User = require('../models/Users')
 const { body } =  require('express-validator');
+const isAuth = require('../middleware/isAuth');
 
 router.post('/signup',[
     body('email')
@@ -25,6 +26,13 @@ router.post('/signup',[
     //     .isLength({min:6}) 
 ],authController.signup)
 
+router.post('/signup/otp-check',authController.checkOTP)
+
 router.post('/login',authController.login)
+
+router.post('/authcheck',isAuth,(req,res,next) =>{
+    console.log(req.User)
+    res.json("you are verfied and here");
+})
 
 module.exports = router;
