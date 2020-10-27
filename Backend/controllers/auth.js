@@ -10,7 +10,7 @@ const JWT = require('jsonwebtoken')
 const dotenv = require('dotenv')
 dotenv.config();
 // const { authSchema } = require('../helpers/validation_Schema');
-// const { signAccessToken } = require('../helpers/jwt_helper'); 
+ const { signAccessToken } = require('../helpers/jwt_helper'); 
 
 
 
@@ -94,13 +94,16 @@ exports.checkOTP = (req,res,next) =>{
     console.log("here at OTP check")
     const email = req.body.email;
     const checkOtp = req.body.otp;
-    console.log("1")
+    console.log("1"+ email + checkOtp)
     Otp.findOne({email:email}).then(otpResult =>{
         console.log("2")
         if(otpResult.otp === checkOtp){
             console.log("3")
             User.findOne({email:email}).then(user => {
+
                 user.isverified = "True";
+
+                // const signAccessToken = signAccessToken(user.email,user._id.toString()); 
                 const signAccessToken  = JWT.sign(
                     {
                       email: user.email,
@@ -115,7 +118,7 @@ exports.checkOTP = (req,res,next) =>{
                       email: user.email,
                       userId:user._id.toString()
                     },
-                    process.env.VERIFY_TOKEN_KEY,
+                    process.env.REFRESH_TOKEN_KEY,
                     { expiresIn:'1y' } 
                   );
     
@@ -132,6 +135,41 @@ exports.checkOTP = (req,res,next) =>{
     })
 }
 
+exports.refreshToken = (req,res,next) =>{
+    const refreshToken = req.body.refreshToken
+
+    const payload = JWT.verify(refreshToken,process.env.REFRESH_TOKEN_KEY)
+
+    const signAccessToken  = JWT.sign(
+        {
+          email:payload.email,
+          userId:payload.userId
+        },
+        process.env.ACCESS_TOKEN_KEY,
+        { expiresIn:'1h' } 
+      );
+
+      const verifyAccessToken  = JWT.sign(
+        {
+            email:payload.email,
+            userId:payload.userId
+        },
+        process.env.REFRESH_TOKEN_KEY,
+        { expiresIn:'1y' } 
+      );
+
+      res.json( {signAccessToken,verifyAccessToken} )
+    
+}
 exports.login = (req,res,next) =>{
     console.log("here at Login")
+    const errors = validationResult(req); 
+    if(errors){
+      const error = new Error('Validation Failed');
+      error.statusCode = 422;
+      error.data = errors.array();
+      throw error;
+    }
+    const email = req.body.name;
+    const password = req.body.password
 }

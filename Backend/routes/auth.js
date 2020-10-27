@@ -28,6 +28,8 @@ router.post('/signup',[
 
 router.post('/signup/otp-check',authController.checkOTP)
 
+router.post('/refreshToken',authController.refreshToken)
+
 router.post('/login',authController.login)
 
 router.post('/authcheck',isAuth,(req,res,next) =>{
