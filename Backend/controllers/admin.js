@@ -20,6 +20,17 @@ exports.addCategory = (req,res,next) => {
     
 }
 
+exports.deleteCategory = (req,res,next) => {
+    const category = req.body.category;
+    
+    categorySchema.findOneAndDelete({category:category}).then(result => {
+        res.status(200).json({message:"Category Deleted",result})
+    }).catch(err =>{
+        res.status(500).json("Oops!!category Not Deleted")
+    })
+    
+}
+
 exports.addCollage = (req,res,next) => {
 
     const code =  req.body.collageCode;

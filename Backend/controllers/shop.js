@@ -23,7 +23,8 @@ exports.addItem = (req, res, next) => {
   const isveg = req.body.isveg;
   const category = req.body.category;
   const email = req.User.email;
-  const priceArray = req.body.price;
+  const priceArray = req.body.price; // Object required {price:"60",size:"Half"} in this syntax 
+  console.log(priceArray,email)
 
   Users.findOne({ email: email }).then((shopSchema) => {
     shopSchema.shopItem.push({
@@ -33,6 +34,13 @@ exports.addItem = (req, res, next) => {
       category: category,
       priceArray: priceArray,
     });
-    shopSchema.save();
-  });
+    shopSchema.save().then(result =>{
+      res.json(result)
+    });
+  }).catch(err => {
+    res.status(500).json("Not saved")
+  })
 };
+
+
+

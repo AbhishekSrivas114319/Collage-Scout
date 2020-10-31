@@ -7,7 +7,7 @@ const shopController = require('../controllers/shop')
 const imageStorage = multer.diskStorage({ //for multer storage
     //these are two functions which are called by multer for incoming file
     destination: (req, file, cb)=> {
-        cb(null,'item-Images'); // null tells the call backs that its ok to store the file because that place is for error
+        cb(null,'FoodItem-Images'); // null tells the call backs that its ok to store the file because that place is for error
     },
     filename:(req, file, cb)=> {
         cb(null,new Date().toDateString() + "-" + file.originalname);
@@ -24,7 +24,7 @@ const imageFilter = (req, file, cb) => { //For filtering the type of file
     }
 };
 
-const imageMulter = multer({storage:imageStorage,fileFilter:imageFilter}).single('imageurl');
+const imageMulter = multer({storage:imageStorage,fileFilter:imageFilter}).single('image');
 
 router.post('/shopInfo',isAuth,shopController.shopInfo)
 
