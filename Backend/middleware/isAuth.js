@@ -32,13 +32,6 @@ module.exports = (req, res, next) => {
         err.statusCode = 500;
         throw err;
       }
-      // console.log("Decoded Token "+decodedToken)
-     /*  if (!decodedToken) {
-        const error = new Error("Not authenticated.");
-        res.status(401).json({messages:"not authenticated"})
-        error.statusCode = 401;
-        throw error;
-      }*/
       
       next();
 };

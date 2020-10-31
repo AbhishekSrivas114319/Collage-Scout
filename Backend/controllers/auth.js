@@ -10,8 +10,6 @@ const JWT = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 // const { authSchema } = require('../helpers/validation_Schema');
-const { signAccessToken } = require("../helpers/jwt_helper");
-const Users = require("../models/Users");
 
 exports.signup = (req, res, next) => {
   const errors = validationResult(req);
@@ -24,26 +22,9 @@ exports.signup = (req, res, next) => {
   }
 
   const email = req.body.email;
-  const name = req.body.name;
   const password = req.body.password;
-  const number = req.body.number
+  const number = req.body.number;
 
-  // const { error } = authSchema.validate({
-  //     email,password,name
-  // })
-  // if(error){
-  //     next(error) ;
-  // }
-
-  // User.findOne({email:email}).then(result =>{
-  //     // const error = new Error("Email Alreasdy Registered")
-  //     // error.status = 422;
-  //     // next(error);
-  //     res.json({message:"email already exist",result:result})
-  // }).catch(err => {
-  //     console.log("2")
-  //     next(err);
-  // })
   console.log("1");
   bcrypt
     .hash(password, 12)
@@ -51,15 +32,9 @@ exports.signup = (req, res, next) => {
       const user = new User({
         isverified: "false",
         email: email,
-        name: name,
         password: hashedPass,
-        number:number
+        number: number,
       });
-
-      // const savedUser =  user.save() //saved user saved here
-      // const accessToken =   signAccessToken(savedUser._id)
-      // console.log(accessToken)
-      // res.send(accessToken)
 
       user
         .save()
@@ -132,6 +107,8 @@ exports.checkOTP = (req, res, next) => {
               process.env.REFRESH_TOKEN_KEY,
               { expiresIn: "1y" }
             );
+
+            user.save();
 
             res.json({
               message: "Otp Verified",
@@ -323,7 +300,7 @@ exports.sendResetOtp = (req, res, next) => {
     .catch((err) => {
       res.json({ message: "Otp not saved ", error: err });
     });
-  return Emailsender.sendemail(email, OTP);
+  return emailSender.sendemail(email, OTP);
 };
 
 exports.checkResetOtp = (req, res, next) => {
