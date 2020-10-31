@@ -1,5 +1,5 @@
 //Schemas
-const User = require("../models/Users");
+const User = require("../models/shops");
 const Otp = require("../models/otp");
 //
 const bcrypt = require("bcryptjs");

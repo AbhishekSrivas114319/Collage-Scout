@@ -1,5 +1,5 @@
 //Schemas
-const Users = require("../models/Users");
+const Users = require("../models/shops");
 
 exports.shopInfo = (req, res, next) => {
   const name = req.body.name;

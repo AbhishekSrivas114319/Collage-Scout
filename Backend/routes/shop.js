@@ -1,7 +1,6 @@
 const router = require("express").Router();
 const isAuth = require("../middleware/isAuth");
 const multer = require('multer');
-const isAuth = require('../middleware/isAuth')
 const shopController = require('../controllers/shop')
 
 
@@ -27,7 +26,7 @@ const imageFilter = (req, file, cb) => { //For filtering the type of file
 
 const imageMulter = multer({storage:imageStorage,fileFilter:imageFilter}).single('imageurl');
 
-router.post('/shopInfo',isAuth,isashopController.shopInfo)
+router.post('/shopInfo',isAuth,shopController.shopInfo)
 
 router.post('/shop/addItem',isAuth,imageMulter,shopController.addItem)
 
