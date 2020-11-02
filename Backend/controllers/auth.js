@@ -167,7 +167,7 @@ exports.login = (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
 
-  Users.findOne({ email: email })
+  User.findOne({ email: email })
     .then((user) => {
       console.log(user);
       if (user.isverified === "false") {

@@ -27,9 +27,10 @@ const imageFilter = (req, file, cb) => { //For filtering the type of file
 const imageMulter = multer({storage:imageStorage,fileFilter:imageFilter}).single('image');
 
 router.post('/shopInfo',isAuth,shopController.shopInfo)
-
 router.post('/shop/addItem',isAuth,imageMulter,shopController.addItem)
 
+router.get('/getCollage',shopController.getCollege)
+router.get('/getCategory',shopController.getCategory)
 
 
 module.exports = router;

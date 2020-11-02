@@ -31,9 +31,13 @@ const userSchema = new mongoose.Schema({
     require: false,
     min: 3,
   },
-  collage: {
+  college: {
     type: String,
     require: false,
+  },
+  inCollege:{
+    type:Boolean,
+    require:false
   },
   shopItem: [
     {

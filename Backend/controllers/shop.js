@@ -1,16 +1,20 @@
 //Schemas
 const Users = require("../models/shops");
+const collageSchema = require('../models/collages')
+const categorySchema = require('../models/categories')
 
 exports.shopInfo = (req, res, next) => {
   const name = req.body.name;
   const shopName = req.body.Shopname;
-  const collage = req.body.collage;
+  const college = req.body.college;
   const email = req.User.email;
+  const inCollege = req.body.inCollege;
 
   Users.findOne({ email: email }).then((User) => {
     User.shopName = shopName;
-    User.collage = collage;
+    User.college = college;
     User.name = name;
+    User.inCollege = inCollege;
     User.save().then((Result) => {
       res.json("User Saved");
     });
@@ -43,4 +47,12 @@ exports.addItem = (req, res, next) => {
 };
 
 
+exports.getCollege = async (req,res,next) => {
+  const colleges = await collageSchema.find();
+  res.json(colleges);
+}
 
+exports.getCategory = async (req,res,next) => {
+  const category = await categorySchema.find();
+  res.json(category);
+}
