@@ -46,7 +46,7 @@ exports.signup = (req, res, next) => {
           res.status(400).json({ message: "User Not Saved", error: err });
         });
 
-      const OTP = otpGenerator.generate(6, {
+      const OTP = otpGenerator.generate(4, {
         upperCase: false,
         specialChars: false,
         alphabets: false,
@@ -96,7 +96,7 @@ exports.checkOTP = (req, res, next) => {
                 userId: user._id.toString(),
               },
               process.env.ACCESS_TOKEN_KEY,
-              { expiresIn: "1h" }
+              { expiresIn: "1s" }
             );
 
             const verifyAccessToken = JWT.sign(
@@ -172,7 +172,7 @@ exports.login = (req, res, next) => {
       console.log(user);
       if (user.isverified === "false") {
         //Checking if user is verified or not
-        let OTP = otpGenerator.generate(6, {
+        let OTP = otpGenerator.generate(4, {
           upperCase: false,
           specialChars: false,
           alphabets: false,
@@ -236,7 +236,7 @@ exports.resendOTP = (req, res, next) => {
 
   const email = req.body.email;
 
-  let OTP = otpGenerator.generate(6, {
+  let OTP = otpGenerator.generate(4, {
     upperCase: false,
     specialChars: false,
     alphabets: false,
@@ -245,26 +245,25 @@ exports.resendOTP = (req, res, next) => {
   Otp.findOneAndDelete({ email: email })
     .then((result) => {
       console.log("OTP Doc Deleted");
+      const otp = new Otp({
+        otp: OTP,
+        email: email,
+      });
+
+      otp
+        .save()
+        .then((result) => {
+          res.json("OTP sent to your Email");
+          return emailSender.sendemail(email, OTP);
+        })
+        .catch((err) => {
+          res.json("Otp not Saved in database");
+        });
+      return emailSender.sendemail(email, OTP);
     })
     .catch((err) => {
       res.json("Something went wrong");
     });
-
-  const otp = new Otp({
-    otp: OTP,
-    email: email,
-  });
-
-  otp
-    .save()
-    .then((result) => {
-      res.json("OTP sent to your Email");
-      return emailSender.sendemail(email, OTP);
-    })
-    .catch((err) => {
-      res.json("Otp not Saved in database");
-    });
-  return emailSender.sendemail(email, OTP);
 };
 //PASSWORD REST CONTROLLERS
 exports.sendResetOtp = (req, res, next) => {
@@ -281,7 +280,7 @@ exports.sendResetOtp = (req, res, next) => {
   const email = req.body.email;
   console.log(email);
 
-  let OTP = otpGenerator.generate(6, {
+  let OTP = otpGenerator.generate(4, {
     upperCase: false,
     specialChars: false,
     alphabets: false,
