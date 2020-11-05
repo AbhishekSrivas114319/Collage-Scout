@@ -23,21 +23,24 @@ exports.placeOrder = async (req, res, next) => {
     shopId: shopId,
     consumerId: consumerId,
     itemName: itemName,
-    itemId:itemId,
+    itemId: itemId,
     price: price,
   });
-  console.log(order)
+  console.log(order);
   // const savedOrder = await order.save();
 
   // res.json({ message: "Order Placed", result: savedOrder });
 
-  order.save().then(result => {
-    console.log("1")
-      res.json({message:"Order Placed",result:result})
-  }).catch(err =>{
-    console.log("2")  
-    res.status(500).json("Internal Server Error");
-  })
+  order
+    .save()
+    .then((result) => {
+      console.log("1");
+      res.json({ message: "Order Placed", result: result });
+    })
+    .catch((err) => {
+      console.log("2");
+      res.status(500).json("Internal Server Error");
+    });
 };
 
 exports.consumerOrder = async (req, res, next) => {

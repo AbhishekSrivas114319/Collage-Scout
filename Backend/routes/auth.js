@@ -79,9 +79,9 @@ router.post(
   authController.sendResetOtp
 );
 
-router.post("/check-Reset-Otp",authController.checkResetOtp)
+router.post("/check-Reset-Otp", authController.checkResetOtp);
 
-router.post("/reset-Password",authController.resetPassword)
+router.post("/reset-Password", authController.resetPassword);
 
 router.post("/authcheck", isAuth, (req, res, next) => {
   console.log(req.User);

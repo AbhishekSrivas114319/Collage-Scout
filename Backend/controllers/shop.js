@@ -2,7 +2,7 @@
 const Users = require("../models/shops");
 const collageSchema = require("../models/collages");
 const categorySchema = require("../models/categories");
-const orderSchema = require('../models/orders')
+const orderSchema = require("../models/orders");
 
 /*------------------------------Shop Section-------------------------------------------*/
 exports.shopInfo = (req, res, next) => {
@@ -25,7 +25,7 @@ exports.shopInfo = (req, res, next) => {
 
 exports.addItem = (req, res, next) => {
   const itemName = req.body.itemName;
-  const imgUrl = req.file.filename;
+  const imgUrl = req.body.imgUrl;
   const isveg = req.body.isveg;
   const category = req.body.category;
   const email = req.User.email;
@@ -51,11 +51,10 @@ exports.addItem = (req, res, next) => {
 };
 
 exports.getItem = (req, res, next) => {
- 
   const email = req.body.email;
   Users.findOne({ email: email })
-    .then( (shop) => {
-      res.json({message:"Recently Added",result:shop.shopItem})
+    .then((shop) => {
+      res.json({ message: "Recently Added", result: shop.shopItem });
     })
     .catch((err) => {
       res.status(500).json("Internal Server Error");
@@ -95,7 +94,7 @@ exports.verifyOrder = async (req, res, next) => {
 
 exports.orderStatus = async (req, res, next) => {
   const orderId = req.body.orderId;
-  
+
   const verifyOrder = await orderSchema.findById(orderId);
 
   verifyOrder.orderStatus = "completed";

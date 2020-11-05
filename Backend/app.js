@@ -6,8 +6,9 @@ const bodyParser = require("body-parser");
 //Import Routes
 const authRoutes = require("./routes/auth");
 const shopRoutes = require("./routes/shop");
-const adminRoutes = require('./routes/admin');
-const consumerRoutes = require('./routes/consumer')
+const adminRoutes = require("./routes/admin");
+const consumerRoutes = require("./routes/consumer");
+const adminBroRoutes = require("./routes/adminbro.router");
 
 dotenv.config();
 
@@ -29,10 +30,11 @@ app.use((req, res, next) => {
 });
 
 //Route Middleware
+app.use("/adminBro", adminBroRoutes);
 app.use(authRoutes);
 app.use(shopRoutes);
-app.use('/consumer',consumerRoutes);
-app.use('/admin',adminRoutes);
+app.use("/consumer", consumerRoutes);
+app.use("/admin", adminRoutes);
 
 //Page Not Found
 app.use((req, res, next) => {
