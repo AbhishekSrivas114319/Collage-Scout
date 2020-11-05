@@ -2,6 +2,7 @@
 const Users = require("../models/shops");
 const collageSchema = require("../models/collages");
 const categorySchema = require("../models/categories");
+const orderSchema = require('../models/orders')
 
 /*------------------------------Shop Section-------------------------------------------*/
 exports.shopInfo = (req, res, next) => {
@@ -28,7 +29,7 @@ exports.addItem = (req, res, next) => {
   const isveg = req.body.isveg;
   const category = req.body.category;
   const email = req.User.email;
-  const priceArray = req.body.price; // Object required {price:"60",size:"Half"} in this syntax
+  const priceArray = JSON.parse(req.body.price); // Object required {price:"60",size:"Half"} in this syntax
   console.log(priceArray, email);
 
   Users.findOne({ email: email })
@@ -46,6 +47,18 @@ exports.addItem = (req, res, next) => {
     })
     .catch((err) => {
       res.status(500).json("Not saved");
+    });
+};
+
+exports.getItem = (req, res, next) => {
+ 
+  const email = req.body.email;
+  Users.findOne({ email: email })
+    .then( (shop) => {
+      res.json({message:"Recently Added",result:shop.shopItem})
+    })
+    .catch((err) => {
+      res.status(500).json("Internal Server Error");
     });
 };
 
@@ -78,4 +91,16 @@ exports.verifyOrder = async (req, res, next) => {
   const verifiedOrder = await verifyOrder.save();
 
   res.json({ message: "Order Accepted", result: verifiedOrder });
+};
+
+exports.orderStatus = async (req, res, next) => {
+  const orderId = req.body.orderId;
+  
+  const verifyOrder = await orderSchema.findById(orderId);
+
+  verifyOrder.orderStatus = "completed";
+
+  const verifiedOrder = await verifyOrder.save();
+
+  res.json({ message: "Order Done", result: verifiedOrder });
 };

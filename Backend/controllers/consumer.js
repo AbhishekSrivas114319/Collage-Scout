@@ -15,6 +15,7 @@ exports.getShop = async (req, res, next) => {
 exports.placeOrder = async (req, res, next) => {
   const shopId = req.body.shopId;
   const consumerId = req.body.consumerId;
+  const itemId = req.body.itemId;
   const itemName = req.body.itemName;
   const price = req.body.price;
 
@@ -22,17 +23,21 @@ exports.placeOrder = async (req, res, next) => {
     shopId: shopId,
     consumerId: consumerId,
     itemName: itemName,
+    itemId:itemId,
     price: price,
   });
-  const savedOrder = await order.save();
+  console.log(order)
+  // const savedOrder = await order.save();
 
-  res.json({ message: "Order Placed", result: savedOrder });
+  // res.json({ message: "Order Placed", result: savedOrder });
 
-  // order.save().then(result => {
-  //     res.json({message:"Order Placed",result:result})
-  // }).catch(err =>{
-  //     res.status(500).json("Internal Server Error");
-  // })
+  order.save().then(result => {
+    console.log("1")
+      res.json({message:"Order Placed",result:result})
+  }).catch(err =>{
+    console.log("2")  
+    res.status(500).json("Internal Server Error");
+  })
 };
 
 exports.consumerOrder = async (req, res, next) => {

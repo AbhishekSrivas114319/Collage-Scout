@@ -10,6 +10,10 @@ const orderSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  itemId:{
+    type: String,
+    require: true,
+  },
   itemName: {
     type: String,
     required: true,
@@ -23,17 +27,17 @@ const orderSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
-  isComplete: {
-    type: Boolean,
+  orderStatus: {
+    type: String,
     required: true,
-    default: false,
+    default:"pending",
   },
   isPaid: {
     type: Boolean,
     required: true,
     default: false,
   },
-  createdAt: { type: Date, expires: "1d", default: Date.now },
-});
+  createdAt: { type: Date, expires: "7d", default: Date.now },
+},{timestamps: true});
 
-module.exports = mongoose.model("otp", otpSchema);
+module.exports = mongoose.model("orders", orderSchema);

@@ -28,6 +28,10 @@ const imageMulter = multer({storage:imageStorage,fileFilter:imageFilter}).single
 
 router.post('/shopInfo',isAuth,shopController.shopInfo)
 router.post('/shop/addItem',isAuth,imageMulter,shopController.addItem)
+router.post('/shop/getItem',shopController.getItem)
+router.post('/shop/shopOrder',shopController.shopOrders)
+router.post('/shop/verifyOrder',shopController.verifyOrder)
+
 
 router.get('/getCollage',shopController.getCollege)
 router.get('/getCategory',shopController.getCategory)
