@@ -53,6 +53,15 @@ const userSchema = new mongoose.Schema({
       isveg: {
         type: String,
       },
+      ratingArray:[
+        {
+          rating:{
+            type:Number,
+          },
+          consumerId: {
+            type:mongoose.Schema.Types.ObjectId,
+          }
+        }],
       priceArray: [
         {
           size: {

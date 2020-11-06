@@ -29,7 +29,7 @@ exports.addItem = (req, res, next) => {
   const isveg = req.body.isveg;
   const category = req.body.category;
   const email = req.User.email;
-  const priceArray = JSON.parse(req.body.price); // Object required {price:"60",size:"Half"} in this syntax
+  const priceArray = req.body.price; // Object required {price:"60",size:"Half"} in this syntax
   console.log(priceArray, email);
 
   Users.findOne({ email: email })

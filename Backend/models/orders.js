@@ -1,14 +1,15 @@
-const { ObjectID } = require("mongodb");
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema({
   shopId: {
-    type: ObjectID,
+    type: mongoose.Schema.Types.ObjectId,
     require: true,
+    ref:"shopkeepers"
   },
   consumerId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     require: true,
+    ref:"consumers"
   },
   itemId:{
     type: String,
