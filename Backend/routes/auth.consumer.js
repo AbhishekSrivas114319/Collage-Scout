@@ -1,11 +1,11 @@
 const router = require("express").Router();
-const authController = require("../controllers/auth");
-const User = require("../models/shops");
+const authController = require("../controllers/auth.consumer");
+const User = require("../models/consumer");
 const { body } = require("express-validator");
 const isAuth = require("../middleware/isAuth");
 
 router.post(
-  "/signup",
+  "/consumer-signup",
   [
     body("email")
       .isEmail()
@@ -28,17 +28,17 @@ router.post(
     //     .isEmpty()
     //     .isLength({min:6})
   ],
-  authController.shopSignup
+  authController.consumerSignup
 );
 
 
 
-router.post("/signup/otp-check", authController.checkOTP);
+router.post("/consumer-signup/otp-check", authController.checkOTP);
 
-router.post("/refreshToken", authController.refreshToken);
+// router.post("/refreshToken", authController.refreshToken);
 
 router.post(
-  "/login",
+  "/consumer-login",
   [
     body("email")
       .isEmail()
@@ -60,10 +60,10 @@ router.post(
   authController.login
 );
 
-router.post("/resendOtp", authController.resendOTP);
+// router.post("/resendOtp", authController.resendOTP);
 
 router.post(
-  "/signup/resetOtp",
+  "/consumer-signup/resetOtp",
   [
     body("email")
       .isEmail()
@@ -81,13 +81,8 @@ router.post(
   authController.sendResetOtp
 );
 
-router.post("/check-Reset-Otp", authController.checkResetOtp);
+// router.post("/check-Reset-Otp", authController.checkResetOtp);
 
-router.post("/reset-Password", authController.resetPassword);
-
-router.post("/authcheck", isAuth, (req, res, next) => {
-  console.log(req.User);
-  res.json("you are verfied and here");
-});
+router.post("/consumer/reset-Password", authController.resetPassword);
 
 module.exports = router;

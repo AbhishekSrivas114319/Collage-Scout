@@ -1,5 +1,5 @@
 //Schemas
-const User = require("../models/shops");
+const User = require("../models/consumer");
 const Otp = require("../models/otp");
 //
 const bcrypt = require("bcryptjs");
@@ -11,7 +11,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 // const { authSchema } = require('../helpers/validation_Schema');
 
-exports.shopSignup = (req, res, next) => {
+exports.consumerSignup = (req, res, next) => {
   const errors = validationResult(req);
   console.log(errors);
   if (!errors.isEmpty()) {
@@ -23,7 +23,7 @@ exports.shopSignup = (req, res, next) => {
 
   const email = req.body.email;
   const password = req.body.password;
-  const number = req.body.number;
+  const name = req.body.name;
 
   console.log("1");
   bcrypt
@@ -33,7 +33,7 @@ exports.shopSignup = (req, res, next) => {
         isverified: "false",
         email: email,
         password: hashedPass,
-        number: number,
+        name: name,
       });
 
       user
@@ -77,20 +77,16 @@ exports.shopSignup = (req, res, next) => {
 
 //OTP Check
 exports.checkOTP = (req, res, next) => {
-  console.log("here at OTP check");
   const email = req.body.email;
   const checkOtp = req.body.otp;
-  console.log("1" + email + checkOtp);
+
   Otp.findOne({ email: email })
     .then((otpResult) => {
-      console.log("2");
       if (otpResult.otp === checkOtp) {
-        console.log("3");
         User.findOne({ email: email })
           .then((user) => {
             user.isverified = "True";
 
-            // const signAccessToken = signAccessToken(user.email,user._id.toString());
             const signAccessToken = JWT.sign(
               {
                 email: user.email,
@@ -109,7 +105,9 @@ exports.checkOTP = (req, res, next) => {
               { expiresIn: "1y" }
             );
 
-            user.save();
+            user.save().then(result =>{
+                console.log(result)
+            });
 
             res.json({
               message: "Otp Verified",
@@ -128,35 +126,9 @@ exports.checkOTP = (req, res, next) => {
       res.json("Otp expire, Please resend the email");
     });
 };
-//Refresh Token
-exports.refreshToken = (req, res, next) => {
-  const refreshToken = req.body.refreshToken;
 
-  const payload = JWT.verify(refreshToken, process.env.REFRESH_TOKEN_KEY);
-
-  const signAccessToken = JWT.sign(
-    {
-      email: payload.email,
-      userId: payload.userId,
-    },
-    process.env.ACCESS_TOKEN_KEY,
-    { expiresIn: "1h" }
-  );
-
-  const verifyAccessToken = JWT.sign(
-    {
-      email: payload.email,
-      userId: payload.userId,
-    },
-    process.env.REFRESH_TOKEN_KEY,
-    { expiresIn: "1y" }
-  );
-
-  res.json({ signAccessToken, refreshToken: verifyAccessToken });
-};
 //Login Controller
 exports.login = (req, res, next) => {
-  console.log("here at Login");
   const errors = validationResult(req);
   console.log(errors);
   if (!errors.isEmpty()) {
@@ -232,40 +204,40 @@ exports.login = (req, res, next) => {
 };
 
 //Resending the OTP
-exports.resendOTP = (req, res, next) => {
-  // extra measure's taken if, password valnerability occurs.........
+// exports.resendOTP = (req, res, next) => {
+//   // extra measure's taken if, password valnerability occurs.........
 
-  const email = req.body.email;
+//   const email = req.body.email;
 
-  let OTP = otpGenerator.generate(4, {
-    upperCase: false,
-    specialChars: false,
-    alphabets: false,
-  });
+//   let OTP = otpGenerator.generate(4, {
+//     upperCase: false,
+//     specialChars: false,
+//     alphabets: false,
+//   });
 
-  Otp.findOneAndDelete({ email: email })
-    .then((result) => {
-      console.log("OTP Doc Deleted");
-      const otp = new Otp({
-        otp: OTP,
-        email: email,
-      });
+//   Otp.findOneAndDelete({ email: email })
+//     .then((result) => {
+//       console.log("OTP Doc Deleted");
+//       const otp = new Otp({
+//         otp: OTP,
+//         email: email,
+//       });
 
-      otp
-        .save()
-        .then((result) => {
-          res.json("OTP sent to your Email");
-          return emailSender.sendemail(email, OTP);
-        })
-        .catch((err) => {
-          res.json("Otp not Saved in database");
-        });
-      return emailSender.sendemail(email, OTP);
-    })
-    .catch((err) => {
-      res.json("Something went wrong");
-    });
-};
+//       otp
+//         .save()
+//         .then((result) => {
+//           res.json("OTP sent to your Email");
+//           return emailSender.sendemail(email, OTP);
+//         })
+//         .catch((err) => {
+//           res.json("Otp not Saved in database");
+//         });
+//       return emailSender.sendemail(email, OTP);
+//     })
+//     .catch((err) => {
+//       res.json("Something went wrong");
+//     });
+// };
 //PASSWORD REST CONTROLLERS
 exports.sendResetOtp = (req, res, next) => {
   const errors = validationResult(req);
@@ -303,18 +275,18 @@ exports.sendResetOtp = (req, res, next) => {
   return emailSender.sendemail(email, OTP);
 };
 
-exports.checkResetOtp = (req, res, next) => {
-  const otp = req.body.otp;
-  const email = req.body.email;
-  console.log(otp);
-  Otp.findOne({ email: email }).then((data) => {
-    if (!(data.otp === otp)) {
-      res.status(400).json("Otp incorrect");
-    } else {
-      res.status(200).json("Otp correct");
-    }
-  });
-};
+// exports.checkResetOtp = (req, res, next) => {
+//   const otp = req.body.otp;
+//   const email = req.body.email;
+//   console.log(otp);
+//   OtpUser.findOne({ email: email }).then((data) => {
+//     if (!(data.otp === otp)) {
+//       res.status(400).json("Otp incorrect");
+//     } else {
+//       res.status(200).json("Otp correct");
+//     }
+//   });
+// };
 
 exports.resetPassword = (req, res, next) => {
   const email = req.body.email;

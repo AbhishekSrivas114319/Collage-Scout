@@ -5,6 +5,7 @@ const createError = require("http-errors");
 const bodyParser = require("body-parser");
 //Import Routes
 const authRoutes = require("./routes/auth");
+const consumerAuthRoutes = require("./routes/auth.consumer");
 const shopRoutes = require("./routes/shop");
 const adminRoutes = require("./routes/admin");
 const consumerRoutes = require("./routes/consumer");
@@ -32,6 +33,7 @@ app.use((req, res, next) => {
 //Route Middleware
 app.use("/adminBro", adminBroRoutes);
 app.use(authRoutes);
+app.use(consumerAuthRoutes);
 app.use(shopRoutes);
 app.use("/consumer", consumerRoutes);
 app.use("/admin", adminRoutes);
