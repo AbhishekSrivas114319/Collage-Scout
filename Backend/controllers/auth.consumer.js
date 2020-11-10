@@ -105,8 +105,8 @@ exports.checkOTP = (req, res, next) => {
               { expiresIn: "1y" }
             );
 
-            user.save().then(result =>{
-                console.log(result)
+            user.save().then((result) => {
+              console.log(result);
             });
 
             res.json({

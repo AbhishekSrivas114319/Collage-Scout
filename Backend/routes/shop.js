@@ -30,8 +30,10 @@ router.post("/shop/addItem", isAuth, shopController.addItem);
 router.post("/shop/getItem", shopController.getItem);
 router.post("/shop/shopOrder", shopController.shopOrders);
 router.post("/shop/verifyOrder", shopController.verifyOrder);
+router.post("/todaysTop", shopController.todaysTop);
 
 router.get("/getCollage", shopController.getCollege);
 router.get("/getCategory", shopController.getCategory);
+router.get("/weeklyStat", shopController.weeklyStat);
 
 module.exports = router;

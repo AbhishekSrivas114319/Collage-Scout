@@ -38,6 +38,14 @@ const orderSchema = new mongoose.Schema({
     required: true,
     default: false,
   },
+  orderDate:{
+    type: String,
+    required: false,
+  },
+  rating:{
+    type: Number,
+    required: false,
+  },
   createdAt: { type: Date, expires: "7d", default: Date.now },
 },{timestamps: true});
 

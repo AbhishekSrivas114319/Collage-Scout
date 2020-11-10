@@ -31,8 +31,6 @@ router.post(
   authController.consumerSignup
 );
 
-
-
 router.post("/consumer-signup/otp-check", authController.checkOTP);
 
 // router.post("/refreshToken", authController.refreshToken);

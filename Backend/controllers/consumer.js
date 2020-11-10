@@ -19,6 +19,7 @@ exports.placeOrder = async (req, res, next) => {
   const itemId = req.body.itemId;
   const itemName = req.body.itemName;
   const price = req.body.price;
+  const rating = req.body.rating;
 
   const order = new orderSchema({
     shopId: shopId,
@@ -26,6 +27,7 @@ exports.placeOrder = async (req, res, next) => {
     itemName: itemName,
     itemId: itemId,
     price: price,
+    rating:rating
   });
   console.log(order);
   // const savedOrder = await order.save();

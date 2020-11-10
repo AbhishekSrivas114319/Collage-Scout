@@ -31,8 +31,6 @@ router.post(
   authController.shopSignup
 );
 
-
-
 router.post("/signup/otp-check", authController.checkOTP);
 
 router.post("/refreshToken", authController.refreshToken);

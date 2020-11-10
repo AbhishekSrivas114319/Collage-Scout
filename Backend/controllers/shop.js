@@ -54,7 +54,7 @@ exports.getItem = (req, res, next) => {
   const email = req.body.email;
   Users.findOne({ email: email })
     .then((shop) => {
-      res.json({ message: "Recently Added", result: shop.shopItem });
+      res.send(shop.shopItem);
     })
     .catch((err) => {
       res.status(500).json("Internal Server Error");
@@ -102,4 +102,48 @@ exports.orderStatus = async (req, res, next) => {
   const verifiedOrder = await verifyOrder.save();
 
   res.json({ message: "Order Done", result: verifiedOrder });
+};
+
+exports.todaysTop = async (req, res, next) => {
+  const Date = req.body.Date;
+
+  try {
+    const result = await orderSchema.aggregate([
+      { $match: { orderDate: { $in: [Date] } } },
+      {
+        $group: {
+          _id: "$itemId",
+          total: { $sum: "$price" },
+          itemSold: { $sum: 1 },
+          name: { $addToSet: "$itemName" },
+          rating:{$addToSet:"$rating"}
+        },
+      },
+      { $sort: { total: -1 } },
+    ]);
+
+    res.json(result);
+  } catch (err) {
+    res.json(err);
+  }
+};
+
+exports.weeklyStat = async (req, res, next) => {
+  try {
+    const result = await orderSchema.aggregate([
+      {
+        $group: {
+          _id: "$orderDate",
+          total: { $sum: "$price" },
+          itemSold: { $sum: 1 },
+          name: { $addToSet: "$itemName" },
+        },
+      },
+      { $sort: { _id: -1 } },
+    ]);
+
+    res.json(result);
+  } catch (err) {
+    res.json(err);
+  }
 };
