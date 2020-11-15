@@ -11,6 +11,10 @@ const orderSchema = new mongoose.Schema({
     require: true,
     ref:"consumers"
   },
+  imgUrl:{
+    type:String,
+    required:false
+  },
   itemId:{
     type: String,
     require: true,

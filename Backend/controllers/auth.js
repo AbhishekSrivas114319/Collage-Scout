@@ -217,6 +217,7 @@ exports.login = (req, res, next) => {
             message: "User loggedin",
             signAccessToken,
             refreshToken: verifyAccessToken,
+            userId:user._id
           });
         })
         .catch((err) => {
