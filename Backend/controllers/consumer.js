@@ -21,6 +21,7 @@ exports.placeOrder = async (req, res, next) => {
   const price = req.body.price;
   const rating = req.body.rating;
   const imgUrl = req.body.imgUrl;
+  const date = req.body.date;
 
   const order = new orderSchema({
     shopId: shopId,
@@ -29,7 +30,8 @@ exports.placeOrder = async (req, res, next) => {
     itemId: itemId,
     price: price,
     rating:rating,
-    imgUrl:imgUrl
+    imgUrl:imgUrl,
+    orderDate:date
   });
   console.log(order);
   // const savedOrder = await order.save();
@@ -39,11 +41,9 @@ exports.placeOrder = async (req, res, next) => {
   order
     .save()
     .then((result) => {
-      console.log("1");
       res.json({ message: "Order Placed", result: result });
     })
     .catch((err) => {
-      console.log("2");
       res.status(500).json("Internal Server Error");
     });
 };

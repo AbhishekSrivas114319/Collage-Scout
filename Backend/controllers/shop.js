@@ -75,7 +75,7 @@ exports.shopOrders = async (req, res, next) => {
   //For ShopOwner to check Orders
   const shopId = req.body.shopId;
 
-  const myOrders = await orderSchema.find({ shopId: shopId });
+  const myOrders = await orderSchema.find({ shopId: shopId }).populate('itemId');
 
   res.json({ message: "All the Order List", orders: myOrders });
 };
