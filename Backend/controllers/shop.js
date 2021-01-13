@@ -3,6 +3,7 @@ const Users = require("../models/shops");
 const collageSchema = require("../models/collages");
 const categorySchema = require("../models/categories");
 const orderSchema = require("../models/orders");
+const graphSchema = require("../models/graphModel")
 
 /*------------------------------Shop Section-------------------------------------------*/
 exports.shopInfo = (req, res, next) => {
@@ -75,7 +76,7 @@ exports.shopOrders = async (req, res, next) => {
   //For ShopOwner to check Orders
   const shopId = req.body.shopId;
 
-  const myOrders = await orderSchema.find({ shopId: shopId }).populate('itemId');
+  const myOrders = await orderSchema.find({ shopId: shopId });
 
   res.json({ message: "All the Order List", orders: myOrders });
 };
@@ -106,10 +107,11 @@ exports.orderStatus = async (req, res, next) => {
 
 exports.todaysTop = async (req, res, next) => {
   const Date = req.body.Date;
-
+  const Id = req.body.shopId;
+console.log(Id)
   try {
-    const result = await orderSchema.aggregate([
-      { $match: { orderDate: { $in: [Date] } } },
+    const result = await graphSchema.aggregate([
+      { $match: { $and: [ { orderDate: { $in: [Date] } },{ shopId: { $in: [Id] } }  ] } },
       {
         $group: {
           _id: "$itemId",
@@ -130,8 +132,10 @@ exports.todaysTop = async (req, res, next) => {
 
 exports.weeklyStat = async (req, res, next) => {
   try {
-    const result = await orderSchema.aggregate([
+    const result = await graphSchema.aggregate([
+      { $match: { $and: [ { shopId: { $in: [Id] } }  ] } },
       {
+        
         $group: {
           _id: "$orderDate",
           total: { $sum: "$price" },

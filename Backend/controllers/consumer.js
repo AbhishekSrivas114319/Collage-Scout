@@ -1,5 +1,6 @@
 const shopSchema = require("../models/shops");
 const orderSchema = require("../models/orders");
+const graphSchema = require('../models/graphModel')
 const { json } = require("body-parser");
 
 /*------------------------------Consumer Section-------------------------------------------*/
@@ -14,29 +15,41 @@ exports.getShop = async (req, res, next) => {
 };
 
 exports.placeOrder = async (req, res, next) => {
+  
+  const orderArray = req.body.orderArray; //[{itemId:, itemName:, price: isaccepted orderStatus: isPaid: orderDate: rating:}]
   const shopId = req.body.shopId;
-  const consumerId = req.body.consumerId;
-  const itemId = req.body.itemId;
-  const itemName = req.body.itemName;
-  const price = req.body.price;
-  const rating = req.body.rating;
   const imgUrl = req.body.imgUrl;
+  const consumerId = req.body.consumerId;
   const date = req.body.date;
+  
+  await orderArray.forEach( async (element) => {
+        
+    const orderGraph = new graphSchema({
+      shopId:shopId,
+      orderDate:date,
+      itemId: element.itemId,
+      itemName: element.itemName,
+      price: element.price,
+      rating:element.rating
+    })
 
+    try{
+        const savedData = await orderGraph.save();
+        console.log(savedData);
+    }
+    catch(err){
+        res.json(err);
+    }
+    
+});
+  
   const order = new orderSchema({
     shopId: shopId,
     consumerId: consumerId,
-    itemName: itemName,
-    itemId: itemId,
-    price: price,
-    rating:rating,
+    orderDate:date,
+    ordersArray:orderArray,
     imgUrl:imgUrl,
-    orderDate:date
   });
-  console.log(order);
-  // const savedOrder = await order.save();
-
-  // res.json({ message: "Order Placed", result: savedOrder });
 
   order
     .save()
