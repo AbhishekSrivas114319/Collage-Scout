@@ -131,6 +131,7 @@ console.log(Id)
 };
 
 exports.weeklyStat = async (req, res, next) => {
+  const Id = req.body.shopId;
   try {
     const result = await graphSchema.aggregate([
       { $match: { $and: [ { shopId: { $in: [Id] } }  ] } },

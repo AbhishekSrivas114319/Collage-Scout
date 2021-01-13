@@ -25,7 +25,6 @@ exports.consumerSignup = (req, res, next) => {
   const password = req.body.password;
   const name = req.body.name;
 
-  console.log("1");
   bcrypt
     .hash(password, 12)
     .then((hashedPass) => {
@@ -113,6 +112,7 @@ exports.checkOTP = (req, res, next) => {
               message: "Otp Verified",
               signAccessToken,
               refreshToken: verifyAccessToken,
+              userId:user._id
             });
           })
           .catch((err) => {
@@ -189,6 +189,7 @@ exports.login = (req, res, next) => {
             message: "User loggedin",
             signAccessToken,
             refreshToken: verifyAccessToken,
+            userId:user._id
           });
         })
         .catch((err) => {

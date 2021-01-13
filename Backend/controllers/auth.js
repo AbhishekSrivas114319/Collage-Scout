@@ -115,6 +115,7 @@ exports.checkOTP = (req, res, next) => {
               message: "Otp Verified",
               signAccessToken,
               refreshToken: verifyAccessToken,
+              userId:user._id
             });
           })
           .catch((err) => {
