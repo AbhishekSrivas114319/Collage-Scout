@@ -112,7 +112,8 @@ exports.checkOTP = (req, res, next) => {
               message: "Otp Verified",
               signAccessToken,
               refreshToken: verifyAccessToken,
-              userId:user._id
+              userId:user._id,
+              userName:user.name
             });
           })
           .catch((err) => {
@@ -189,7 +190,8 @@ exports.login = (req, res, next) => {
             message: "User loggedin",
             signAccessToken,
             refreshToken: verifyAccessToken,
-            userId:user._id
+            userId:user._id,
+            userName:user.name
           });
         })
         .catch((err) => {
