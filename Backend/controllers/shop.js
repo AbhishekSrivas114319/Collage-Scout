@@ -83,23 +83,36 @@ exports.shopOrders = async (req, res, next) => {
 
 exports.verifyOrder = async (req, res, next) => {
   const orderId = req.body.orderId;
+  const itemId =  req.body.itemId;
 
   const verifyOrder = await orderSchema.findById(orderId);
 
-  verifyOrder.isaccepted = true;
-
+  verifyOrder.ordersArray.forEach( async (element) => {
+    console.log(element);
+    if( (element.itemId).toString() === (itemId).toString() ){
+      element.isaccepted = true;
+    }
+   });
+   console.log()
   const verifiedOrder = await verifyOrder.save();
 
   res.json({ message: "Order Accepted", result: verifiedOrder });
 };
 
 exports.orderStatus = async (req, res, next) => {
+
   const orderId = req.body.orderId;
+  const itemId =  req.body.itemId;
 
   const verifyOrder = await orderSchema.findById(orderId);
 
-  verifyOrder.orderStatus = "completed";
-
+  verifyOrder.ordersArray.forEach( async (element) => {
+    console.log(element);
+    if( (element.itemId).toString() === (itemId).toString() ){
+      element.orderStatus = "Delivered";
+    }
+   });
+   console.log()
   const verifiedOrder = await verifyOrder.save();
 
   res.json({ message: "Order Done", result: verifiedOrder });

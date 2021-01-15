@@ -21,6 +21,7 @@ exports.placeOrder = async (req, res, next) => {
   const imgUrl = req.body.imgUrl;
   const consumerId = req.body.consumerId;
   const date = req.body.date;
+  const name = req.body.name;
   
   await orderArray.forEach( async (element) => {
         
@@ -44,6 +45,7 @@ exports.placeOrder = async (req, res, next) => {
 });
   
   const order = new orderSchema({
+    customerName:name,
     shopId: shopId,
     consumerId: consumerId,
     orderDate:date,
