@@ -165,3 +165,5 @@ exports.weeklyStat = async (req, res, next) => {
     res.json(err);
   }
 };
+
+// available not available route here

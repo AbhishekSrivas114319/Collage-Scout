@@ -39,6 +39,10 @@ const userSchema = new mongoose.Schema({
     type:Boolean,
     require:false
   },
+  time:{
+    type:String,
+    default:"not available"
+  },
   shopItem: [
     {
       name: {
@@ -48,7 +52,8 @@ const userSchema = new mongoose.Schema({
         type: String,
       },
       itemsAvailable: {
-        type: Number,
+        type: Boolean,
+        default: false
       },
       isveg: {
         type: String,

@@ -31,6 +31,7 @@ router.post("/shop/getItem", shopController.getItem);
 router.post("/shop/shopOrder", shopController.shopOrders);
 router.post("/shop/verifyOrder", shopController.verifyOrder);
 router.post("/todaysTop", shopController.todaysTop);
+router.post("/shop/orderStatus",shopController.orderStatus);
 
 router.get("/getCollage", shopController.getCollege);
 router.get("/getCategory", shopController.getCategory);
