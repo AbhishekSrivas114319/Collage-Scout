@@ -25,6 +25,7 @@ exports.consumerSignup = (req, res, next) => {
   const password = req.body.password;
   const name = req.body.name;
   const number = req.body.number;
+  const college = req.body.college;
 
   bcrypt
     .hash(password, 12)
@@ -35,6 +36,7 @@ exports.consumerSignup = (req, res, next) => {
         number:number,
         password: hashedPass,
         name: name,
+        college: college
       });
 
       user
@@ -244,19 +246,6 @@ exports.sendResetOtp = (req, res, next) => {
     });
   return emailSender.sendemail(email, OTP);
 };
-
-// exports.checkResetOtp = (req, res, next) => {
-//   const otp = req.body.otp;
-//   const email = req.body.email;
-//   console.log(otp);
-//   OtpUser.findOne({ email: email }).then((data) => {
-//     if (!(data.otp === otp)) {
-//       res.status(400).json("Otp incorrect");
-//     } else {
-//       res.status(200).json("Otp correct");
-//     }
-//   });
-// };
 
 exports.resetPassword = (req, res, next) => {
   const email = req.body.email;
