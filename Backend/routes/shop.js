@@ -37,4 +37,7 @@ router.get("/getCollage", shopController.getCollege);
 router.get("/getCategory", shopController.getCategory);
 router.get("/weeklyStat", shopController.weeklyStat);
 
+router.get("/shopDeatils/:email",shopController.shopDeatils);
+router.post("/shop/timing",shopController.shopTiming);
+
 module.exports = router;

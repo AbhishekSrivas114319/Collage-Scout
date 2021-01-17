@@ -1,7 +1,9 @@
 const shopSchema = require("../models/shops");
 const orderSchema = require("../models/orders");
 const graphSchema = require('../models/graphModel')
+const consummer = require("../models/consumer");
 const { json } = require("body-parser");
+const consumer = require("../models/consumer");
 
 /*------------------------------Consumer Section-------------------------------------------*/
 exports.getShop = async (req, res, next) => {
@@ -88,4 +90,10 @@ exports.rating = async (req, res, next) => {
   } catch (err) {
     res.json(err);
   }
+};
+
+exports.consumerDetails = (req,res,next)=>{
+  consumer.findOne({ email:req.params.email }).then((User) => {
+    return res.status(200).json(User);
+  });
 };

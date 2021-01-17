@@ -166,4 +166,23 @@ exports.weeklyStat = async (req, res, next) => {
   }
 };
 
+exports.shopTiming = (req,res,next) =>{
+
+  const email = req.body.email;
+  const time = req.body.time;
+  console.log(time)
+  Users.findOne({ email:email }).then((User) => {
+    User.time=time
+    User.save().then((Result) => {
+      res.json("User Saved");
+    });
+  });
+};
+
+exports.shopDeatils = (req,res,next)=>{
+  Users.findOne({ email:req.params.email }).then((User) => {
+    return res.status(200).json(User);
+  });
+};
+
 // available not available route here
