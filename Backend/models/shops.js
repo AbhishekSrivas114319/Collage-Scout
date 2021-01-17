@@ -53,7 +53,7 @@ const userSchema = new mongoose.Schema({
       },
       itemsAvailable: {
         type: Boolean,
-        default: false
+        default: true
       },
       isveg: {
         type: String,
