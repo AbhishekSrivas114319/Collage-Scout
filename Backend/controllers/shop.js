@@ -186,3 +186,20 @@ exports.shopDeatils = (req,res,next)=>{
 };
 
 // available not available route here
+exports.availability = (req,res,next)=>{
+
+  const email= req.body.email;
+  const itemname = req.body.itemname;
+  console.log(itemname);
+  Users.findOne({email:email}).then((User)=>{
+    User.shopItem.forEach(item =>{
+      if((item.name)===(itemname))
+      {
+        item.itemsAvailable=true;
+      }
+    });
+    User.save().then((Result) => {
+      res.json("User Saved");
+    });
+  });
+};

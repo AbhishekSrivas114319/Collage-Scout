@@ -1,7 +1,6 @@
 const shopSchema = require("../models/shops");
 const orderSchema = require("../models/orders");
 const graphSchema = require('../models/graphModel')
-const consummer = require("../models/consumer");
 const { json } = require("body-parser");
 const consumer = require("../models/consumer");
 

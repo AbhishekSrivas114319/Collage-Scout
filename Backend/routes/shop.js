@@ -40,4 +40,6 @@ router.get("/weeklyStat", shopController.weeklyStat);
 router.get("/shopDeatils/:email",shopController.shopDeatils);
 router.post("/shop/timing",shopController.shopTiming);
 
+router.post("/shopitem/availability",shopController.availability);
+
 module.exports = router;
