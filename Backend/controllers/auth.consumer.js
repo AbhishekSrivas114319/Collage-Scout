@@ -117,7 +117,9 @@ exports.checkOTP = (req, res, next) => {
               signAccessToken,
               refreshToken: verifyAccessToken,
               userId:user._id,
-              userName:user.name
+              userName:user.name,
+              college:result.college
+              
             });
           })
           .catch((err) => {
@@ -195,7 +197,8 @@ exports.login = (req, res, next) => {
             signAccessToken,
             refreshToken: verifyAccessToken,
             userId:user._id,
-            userName:user.name
+            userName:user.name,
+            college:result.college
           });
         })
         .catch((err) => {

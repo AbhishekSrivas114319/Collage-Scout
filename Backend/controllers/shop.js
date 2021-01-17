@@ -20,7 +20,7 @@ exports.shopInfo = (req, res, next) => {
     User.name = name;
     User.inCollege = inCollege;
     User.save().then((Result) => {
-      res.json("User Saved");
+      res.json({message:"User Saved",shopkeeprName:Result.name,shopName:shopName});
     });
   });
 };
