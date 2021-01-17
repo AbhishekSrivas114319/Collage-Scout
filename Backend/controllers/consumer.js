@@ -23,6 +23,7 @@ exports.placeOrder = async (req, res, next) => {
   const consumerId = req.body.consumerId;
   const date = req.body.date;
   const name = req.body.name;
+  const number = req.body.number
   
   await orderArray.forEach( async (element) => {
         
@@ -32,7 +33,7 @@ exports.placeOrder = async (req, res, next) => {
       itemId: element.itemId,
       itemName: element.itemName,
       price: element.price,
-      rating:element.rating
+      rating:element.rating,
     })
 
     try{
@@ -52,6 +53,7 @@ exports.placeOrder = async (req, res, next) => {
     orderDate:date,
     ordersArray:orderArray,
     imgUrl:imgUrl,
+    number:number
   });
 
   order

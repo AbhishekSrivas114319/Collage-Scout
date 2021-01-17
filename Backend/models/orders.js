@@ -20,6 +20,10 @@ const orderSchema = new mongoose.Schema(
       type:String,
       required: false
     },
+    number:{
+      type:String,
+      required:false
+    },
     ordersArray: [
       {
         itemId: {
