@@ -138,7 +138,7 @@ console.log(Id)
       { $sort: { total: -1 } },
     ]);
 
-    res.json(result);
+    res.status(200).json(result);
   } catch (err) {
     res.json(err);
   }
@@ -161,7 +161,7 @@ exports.weeklyStat = async (req, res, next) => {
       { $sort: { _id: -1 } },
     ]);
 
-    res.json(result);
+    res.status(200).json(result);
   } catch (err) {
     res.json(err);
   }
@@ -200,7 +200,7 @@ exports.availability = (req,res,next)=>{
       }
     });
     User.save().then((Result) => {
-      res.json("availibity checked");
+      res.status(200).json("availibity checked");
     });
   });
 };
@@ -214,7 +214,7 @@ exports.shopClosed = (req,res,next)=>{
 
     });
     User.save().then((Result) => {
-      res.json("availibity checked");
+      res.status(200).json("availibity checked");
     });
   });
 };
