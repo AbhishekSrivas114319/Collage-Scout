@@ -3,7 +3,8 @@ const Users = require("../models/shops");
 const collageSchema = require("../models/collages");
 const categorySchema = require("../models/categories");
 const orderSchema = require("../models/orders");
-const graphSchema = require("../models/graphModel")
+const graphSchema = require("../models/graphModel");
+const router = require("../routes/shop");
 
 /*------------------------------Shop Section-------------------------------------------*/
 exports.shopInfo = (req, res, next) => {
@@ -195,11 +196,25 @@ exports.availability = (req,res,next)=>{
     User.shopItem.forEach(item =>{
       if((item.name)===(itemname))
       {
-        item.itemsAvailable=true;
+        item.itemsAvailable=!item.itemsAvailable;
       }
     });
     User.save().then((Result) => {
-      res.json("User Saved");
+      res.json("availibity checked");
+    });
+  });
+};
+
+exports.shopClosed = (req,res,next)=>{
+  const email = req.body.email;
+  Users.findOne({email:email}).then((User)=>{
+    User.shopItem.forEach(item =>{
+      
+      item.itemsAvailable=false;
+
+    });
+    User.save().then((Result) => {
+      res.json("availibity checked");
     });
   });
 };
