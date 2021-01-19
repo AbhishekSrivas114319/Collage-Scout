@@ -118,8 +118,8 @@ exports.checkOTP = (req, res, next) => {
               refreshToken: verifyAccessToken,
               userId:user._id,
               userName:user.name,
-              college:result.college,
-              number:result.number
+              college:user.college,
+              number:user.number
               
             });
           })
@@ -138,7 +138,7 @@ exports.checkOTP = (req, res, next) => {
 //Login Controller
 exports.login = (req, res, next) => {
   const errors = validationResult(req);
-  console.log(errors);
+  
   if (!errors.isEmpty()) {
     const error = new Error("Validation Failed");
     error.statusCode = 422;
@@ -152,12 +152,22 @@ exports.login = (req, res, next) => {
     .then((user) => {
       console.log(user);
       if (user.isverified === "false") {
+
         //Checking if user is verified or not
         let OTP = otpGenerator.generate(4, {
           upperCase: false,
           specialChars: false,
           alphabets: false,
         });
+
+        const otp = new Otp({
+          otp: OTP,
+          email: email,
+        });
+  
+        otp
+          .save()
+
         res.json(
           "This Email is not verified,OTP has been sent to your email please verify"
         );
@@ -199,12 +209,13 @@ exports.login = (req, res, next) => {
             refreshToken: verifyAccessToken,
             userId:user._id,
             userName:user.name,
-            college:result.college,
-            number:result.number
+            college:user.college,
+            number:user.number
           });
         })
         .catch((err) => {
           if (!err.statusCode) {
+            console.log("1111111111111111111111");
             err.statusCode = 500;
           }
           next(err);

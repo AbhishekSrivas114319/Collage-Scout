@@ -179,6 +179,14 @@ exports.login = (req, res, next) => {
           specialChars: false,
           alphabets: false,
         });
+
+        const otp = new Otp({
+          otp: OTP,
+          email: email,
+        });
+  
+        otp.save();
+
         res.json(
           "This Email is not verified,OTP has been sent to your email please verify"
         );
